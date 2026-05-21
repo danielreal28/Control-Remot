@@ -1,0 +1,153 @@
+body {
+    background: #0f172a;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    color: #ffffff;
+}
+
+.remote-container {
+    background: rgba(30, 41, 59, 0.7);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 25px;
+    border-radius: 30px;
+    width: 340px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+    text-align: center;
+}
+
+.connection-box h3 {
+    margin-top: 0;
+    font-size: 1.1rem;
+    color: #94a3b8;
+}
+
+.input-group input {
+    width: 90%;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #334155;
+    background: #1e293b;
+    color: #fff;
+    text-align: center;
+    font-size: 1.1rem;
+}
+
+.action-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    gap: 10px;
+}
+
+.btn {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.btn-connect { background: #2563eb; color: white; }
+.btn-scan { background: #059669; color: white; }
+
+.status-text {
+    margin-top: 10px;
+    font-size: 0.85rem;
+    color: #94a3b8;
+}
+
+.divider {
+    border: 0;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.1);
+    margin: 20px 0;
+}
+
+/* Estilos de la botonera del control */
+.row-buttons {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 15px;
+}
+
+.btn-tv {
+    background: #334155;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 12px;
+    font-size: 1rem;
+    cursor: pointer;
+    min-width: 80px;
+}
+
+.btn-power { background: #dc2626; font-size: 1.3rem; }
+.btn-mute { background: #475569; }
+
+/* El D-PAD redondo */
+.dpad-container {
+    position: relative;
+    width: 180px;
+    height: 180px;
+    margin: 20px auto;
+}
+
+.btn-dpad {
+    position: absolute;
+    background: #1e293b;
+    color: white;
+    border: 1px solid #334155;
+    border-radius: 10px;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.btn-dpad.up    { top: 0; left: 65px; width: 50px; }
+.btn-dpad.down  { bottom: 0; left: 65px; width: 50px; }
+.btn-dpad.left  { top: 65px; left: 0; height: 50px; }
+.btn-dpad.right { top: 65px; right: 0; height: 50px; }
+.btn-dpad.ok    { top: 65px; left: 65px; width: 50px; height: 50px; border-radius: 50%; background: #2563eb; font-weight: bold;}
+
+.grid-controls {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+.control-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #1e293b;
+    border-radius: 15px;
+    padding: 5px;
+}
+
+.btn-control {
+    background: #334155;
+    color: white;
+    border: none;
+    width: 50px;
+    height: 45px;
+    font-weight: bold;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.label {
+    font-size: 0.75rem;
+    color: #64748b;
+    margin: 8px 0;
+}
+
+.footer-credits {
+    margin-top: 25px;
+    font-size: 0.75rem;
+    color: #475569;
+}

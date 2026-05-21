@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control TV - Tecnomaster</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="remote-container">
+        <div class="connection-box">
+            <h3>Conectar Tecnomaster Smart TV</h3>
+            <div class="input-group">
+                <input type="text" id="tv-ip" placeholder="Ej: 192.168.1.15" value="192.168.1.100">
+            </div>
+            <div class="action-buttons">
+                <button id="btn-connect" class="btn btn-connect" onclick="conectarManual()">Conectar IP</button>
+                <button id="btn-scan" class="btn btn-scan" onclick="escanearRed()">🔍 Escanear TV</button>
+            </div>
+            <div id="connection-status" class="status-text">Sin conexión</div>
+        </div>
+
+        <hr class="divider">
+
+        <div class="remote-pad">
+            <div class="row-buttons">
+                <button class="btn-tv btn-power" onclick="enviarComando('POWER')">⏻</button>
+                <button class="btn-tv btn-mute" onclick="enviarComando('MUTE')">🔇</button>
+            </div>
+
+            <div class="dpad-container">
+                <button class="btn-dpad up" onclick="enviarComando('UP')">▲</button>
+                <button class="btn-dpad left" onclick="enviarComando('LEFT')">◀</button>
+                <button class="btn-dpad ok" onclick="enviarComando('ENTER')">OK</button>
+                <button class="btn-dpad right" onclick="enviarComando('RIGHT')">▶</button>
+                <button class="btn-dpad down" onclick="enviarComando('DOWN')">▼</button>
+            </div>
+
+            <div class="row-buttons">
+                <button class="btn-tv utility" onclick="enviarComando('BACK')">Volver</button>
+                <button class="btn-tv utility" onclick="enviarComando('HOME')">Inicio</button>
+                <button class="btn-tv utility" onclick="enviarComando('MENU')">Menú</button>
+            </div>
+
+            <div class="grid-controls">
+                <div class="control-column">
+                    <button class="btn-control" onclick="enviarComando('VOL_UP')">VOL +</button>
+                    <span class="label">Volumen</span>
+                    <button class="btn-control" onclick="enviarComando('VOL_DOWN')">VOL -</button>
+                </div>
+                <div class="control-column">
+                    <button class="btn-control" onclick="enviarComando('CH_UP')">CH +</button>
+                    <span class="label">Canal</span>
+                    <button class="btn-control" onclick="enviarComando('CH_DOWN')">CH -</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-credits">
+            © 2026 Remote Control by DanielReal
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
