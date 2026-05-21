@@ -1,7 +1,7 @@
 let tvIP = "";
 const statusDisplay = document.getElementById('connection-status');
 
-// 1. Guardar y fijar la IP puesta a mano
+// 1. Guardar y fijar la IP estática que metes a mano
 function conectarManual() {
     const inputIP = document.getElementById('tv-ip').value.trim();
     if (!inputIP) {
@@ -9,70 +9,90 @@ function conectarManual() {
         return;
     }
     tvIP = inputIP;
-    statusDisplay.innerText = `IP Fijada en: ${tvIP}`;
+    statusDisplay.innerText = `Conectado manualmente a: ${tvIP}`;
     statusDisplay.style.color = "#60a5fa";
 }
 
-// 2. Escáner automático de red local por Wi-Fi
+// 2. Escáner optimizado para buscar puertos activos de Smart TV
 async function escanearRed() {
-    statusDisplay.innerText = "Escaneando red local (192.168.1.X)...";
+    statusDisplay.innerText = "Escaneando Smart TV en red local...";
     statusDisplay.style.color = "#fbbf24";
     
-    // Rango base más común en routers domésticos
     const baseIP = "192.168.1.";
     let tvEncontrada = false;
 
-    // Escaneamos las IPs más probables asignadas por DHCP (del 100 al 130)
+    // Escaneamos el rango típico de dispositivos DHCP
     for (let i = 100; i <= 130; i++) {
         const testIP = `${baseIP}${i}`;
         try {
-            // Hacemos una petición rápida con un tiempo de espera corto (Timeout)
             const controller = new AbortController();
-            const id = setTimeout(() => controller.abort(), 200); // 200ms por IP
+            const id = setTimeout(() => controller.abort(), 150); // Rápido timeout
 
-            // Probamos el puerto estándar de Smart TV (ej: 8080 o 1925)
-            // Cambia el puerto si tu modelo usa uno específico
-            await fetch(`http://${testIP}:8080/`, { method: 'GET', signal: controller.signal, mode: 'no-cors' });
+            // Probamos el puerto de emparejamiento y control de pantallas inteligentes (8008)
+            await fetch(`http://${testIP}:8008/apps/YouTube`, { method: 'GET', signal: controller.signal, mode: 'no-cors' });
             
             clearTimeout(id);
             tvIP = testIP;
             document.getElementById('tv-ip').value = tvIP;
-            statusDisplay.innerText = `¡TV Tecnomaster encontrada en ${tvIP}!`;
+            statusDisplay.innerText = `¡TV Detectada en ${tvIP}!`;
             statusDisplay.style.color = "#34d399";
             tvEncontrada = true;
             break; 
         } catch (err) {
-            // Si da error o timeout, pasamos a la siguiente IP
+            // Sigue buscando si no responde en esa IP
         }
     }
 
     if (!tvEncontrada) {
-        statusDisplay.innerText = "No se detectó la TV automáticamente. Pon la IP manualmente.";
+        statusDisplay.innerText = "No se detectó la TV de forma automática. Usa la IP Manual.";
         statusDisplay.style.color = "#f87171";
     }
 }
 
-// 3. Enviar los comandos a la televisión por Wi-Fi
+// 3. Enviar comandos usando el protocolo REST de TV basado en Android
 async function enviarComando(comando) {
     if (!tvIP) {
-        alert("Primero debes escanear o ingresar la IP de tu TV.");
+        alert("Introduce la IP estática de tu televisión primero.");
         return;
     }
 
-    // Estructura de la petición HTTP POST hacia el Smart TV
-    // Nota: Dependiendo del año del Tecnomaster, el endpoint puede ser /key o /webapi/control
-    const url = `http://${tvIP}:8080/key/${comando}`;
+    // Mapeo de teclas estándar para televisores Smart (DIAL / Android REST API)
+    let keycode = "";
+    switch(comando) {
+        case 'POWER': keycode = "26"; break;
+        case 'MUTE': keycode = "164"; break;
+        case 'UP': keycode = "19"; break;
+        case 'DOWN': keycode = "20"; break;
+        case 'LEFT': keycode = "21"; break;
+        case 'RIGHT': keycode = "22"; break;
+        case 'ENTER': keycode = "66"; break;
+        case 'BACK': keycode = "4"; break;
+        case 'HOME': keycode = "3"; break;
+        case 'MENU': keycode = "82"; break;
+        case 'VOL_UP': keycode = "24"; break;
+        case 'VOL_DOWN': keycode = "25"; break;
+        case 'CH_UP': keycode = "166"; break;
+        case 'CH_DOWN': keycode = "167"; break;
+        default: keycode = "3";
+    }
 
+    // Usamos el puerto 8008 que es el estándar de control para Chromecast/Android TV integrado
+    // Enviamos la petición simulando una pulsación de tecla nativa (input keyevent)
+    const url = `http://${tvIP}:8008/apps/com.google.android.youtube.tv/channels`;
+    
     try {
+        // Usamos un método POST enviando el keycode en el cuerpo de la solicitud
         await fetch(url, {
             method: 'POST',
-            mode: 'no-cors', // Evita problemas de seguridad entre la app y la TV
+            mode: 'no-cors',
             headers: {
-                'Content-Type': 'application/json'
-            }
+                'Content-Type': 'text/plain',
+                'Origin': 'http://localhost'
+            },
+            body: `action=keyevent&keycode=${keycode}`
         });
-        console.log(`Comando ${comando} enviado con éxito a ${tvIP}`);
+        console.log(`Comando ${comando} (Keycode ${keycode}) enviado a ${tvIP}`);
     } catch (error) {
-        console.error("Error al enviar el comando a la TV: ", error);
+        console.error("Error de comunicación de red: ", error);
     }
 }
