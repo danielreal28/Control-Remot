@@ -24,9 +24,14 @@ jobs:
         with:
           node-version: '22'
 
+      - name: Inicializar y Crear package.json Automáticamente
+        run: |
+          # Esto crea el archivo que le faltaba a NPM para no dar error
+          npm init -y
+
       - name: Instalar Dependencias del Proyecto
         run: |
-          npm install
+          # Ahora sí instalará las librerías de Capacitor de forma limpia
           npm install @capacitor/cli @capacitor/core @capacitor/android
 
       - name: Crear Proyecto Nativo Real
